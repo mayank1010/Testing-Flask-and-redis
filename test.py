@@ -1,4 +1,23 @@
+######################################
+# using redis
 
+import redis
+from flask import Flask
+
+app = Flask(__name__)
+db = redis.Redis(host='localhost', port=6379)
+db.set('hits',0)
+
+@app.route('/')
+def hello():
+    try:
+        count = db.incr('hits')
+    except Exception as e:
+        print(e)
+    return "Page visited {} times".format(count)
+
+if __name__ == "__main__":
+    app.run( debug=True)
 
 # simply using global counter
 
@@ -42,26 +61,7 @@
 
 
 
-######################################
-# using redis
 
-import redis
-from flask import Flask
-
-app = Flask(__name__)
-db = redis.Redis(host='localhost', port=6379)
-db.set('hits',0)
-
-@app.route('/')
-def hello():
-    try:
-        count = db.incr('hits')
-    except Exception as e:
-        print(e)
-    return "Page visited {} times".format(count)
-
-if __name__ == "__main__":
-    app.run( debug=True)
 
 
 
